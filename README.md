@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# react-semantic-ui-datatable
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React datatable using semantic-ui library.
 
 ## Available Scripts
 
