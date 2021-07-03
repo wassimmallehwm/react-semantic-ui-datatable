@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
 import NoData from '../utils/NoData';
 import Tooltip from '../utils/Tooltip'
-import { dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../utils/index';
+import { clientSideFilter, dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../utils/index';
 import ColumnFilter from '../utils/ColumnFilter';
 
 
@@ -44,6 +44,9 @@ const ClientSideDatatable = ({
 
     const formatDatasource = () => {
         let paginatedDatasource = [...datasource];
+        if(filterData){
+            paginatedDatasource = clientSideFilter(paginatedDatasource, filterData)
+        }
         if(sort.sortField && sort.sortDir){
             paginatedDatasource.sort(dynamicSort());
         }
@@ -51,6 +54,11 @@ const ClientSideDatatable = ({
             (pagination.page-1) * pagination.limit,
             (pagination.page) * pagination.limit
         )
+        // setPagination(prev => ({
+        //     ...prev,
+        //     totalPages: Math.round(paginatedDatasource.length / prev.limit),
+        //     total: paginatedDatasource.length
+        // }))
         setDisplayDatasource(paginatedDatasource)
     }
 

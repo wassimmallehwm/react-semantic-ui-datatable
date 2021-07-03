@@ -59,6 +59,25 @@ export const initFilter = (columns) => {
     return initFilter;
 }
 
+export const clientSideFilter = (data, filterData) => {
+    for (const [key, val] of Object.entries(filterData)) {
+        if(val.date){
+            if(val.from.value != ""){
+                data = data.filter(elem => elem[key] > val.from.value);
+            }
+            if(val.to.value != ""){
+                data = data.filter(elem => elem[key] < val.to.value);
+            }
+        } else {
+            if(val.value != ""){
+                const regex = new RegExp(val.value, 'i');
+                data = data.filter(elem => elem[key].match(regex));
+            }
+        }
+    }
+    return data;
+}
+
 export const getSortData = (dir) => {
     if (dir) {
         if (

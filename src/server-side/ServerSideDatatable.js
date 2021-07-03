@@ -18,10 +18,10 @@ const ServerSideDatatable = ({
     limiRows = ['10', '15','25'],
     sortable = false,
     sort = {},
-    onPageChnage = (data) => { },
-    onLimitChnage = (data) => { },
-    onFilterChnage = (data) => { },
-    onSortChnage = (data) => { }
+    onPageChnage = () => { },
+    onLimitChnage = () => { },
+    onFilterChnage = () => { },
+    onSortChnage = () => { }
 }) => {
 
     const [filter, setFilter] = useState(initFilter(columns))

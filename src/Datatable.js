@@ -16,10 +16,10 @@ const Datatable = ({
     pagination,
     sortable,
     sort = {},
-    onPageChnage = (data) => { },
-    onLimitChnage = (data) => { },
-    onFilterChnage = (data) => { },
-    onSortChnage = (data) => { }
+    onPageChnage = () => { },
+    onLimitChnage = () => { },
+    onFilterChnage = () => { },
+    onSortChnage = () => { }
 }) => {
     return serverSide ? 
         (
