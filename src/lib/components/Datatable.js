@@ -1,6 +1,7 @@
 import React from 'react'
 import ServerSideDatatable from './server-side/ServerSideDatatable';
 import ClientSideDatatable from './client-side/ClientSideDatatable';
+import 'semantic-ui-css/semantic.min.css';
 import './Datatable.css'
 
 

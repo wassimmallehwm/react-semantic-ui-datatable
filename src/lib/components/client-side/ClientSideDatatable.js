@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
-import NoData from '../utils/NoData';
-import Tooltip from '../utils/Tooltip'
-import { clientSideFilter, dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../utils/index';
-import ColumnFilter from '../utils/ColumnFilter';
+import NoData from '../../utils/NoData';
+import Tooltip from '../../utils/Tooltip'
+import { clientSideFilter, dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../../utils/index';
+import ColumnFilter from '../../utils/ColumnFilter';
 
 
 const ClientSideDatatable = ({
@@ -74,7 +74,6 @@ const ClientSideDatatable = ({
     }, [pagination, sort, filterData])
 
     const onPageChnage = (page) => {
-        console.log(page)
         setPagination({
             ...pagination,
             page: Math.round(page)

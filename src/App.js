@@ -1,5 +1,5 @@
 import { Button, Image } from 'semantic-ui-react';
-import Datatable from './Datatable';
+import Datatable from './lib/components/Datatable';
 import 'semantic-ui-css/semantic.min.css';
 
 function App() {

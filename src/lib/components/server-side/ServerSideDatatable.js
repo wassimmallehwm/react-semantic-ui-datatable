@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
-import NoData from '../utils/NoData';
-import Tooltip from '../utils/Tooltip'
-import { dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../utils';
-import ColumnFilter from '../utils/ColumnFilter';
+import NoData from '../../utils/NoData';
+import Tooltip from '../../utils/Tooltip'
+import { dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../../utils';
+import ColumnFilter from '../../utils/ColumnFilter';
 
 
 const ServerSideDatatable = ({
