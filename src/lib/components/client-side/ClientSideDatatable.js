@@ -234,9 +234,11 @@ const ClientSideDatatable = ({
             padding: 0,
             margin: 0,
             borderRadius: 0,
-            flex: 8
+            flex: 8,
+            border: '1px solid rgba(34, 36, 38, 0.15)',
+            borderBottom: 'none'
         }}>
-            <Table style={{ borderRadius: 0, textAlign: centered ? 'center' : '' }}
+            <Table style={{ height: "fit-content", border: 'none', borderRadius: 0, textAlign: centered ? 'center' : '' }}
                 selectable={selectable} striped={striped} sortable={sortable} celled
             >
                 <Table.Header>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
 import NoData from '../../utils/NoData';
 import Tooltip from '../../utils/Tooltip'
-import { dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../../utils';
+import { dropdownLimitOptions, getSortData, initFilter, filtersDataReq, sortDirection } from '../../utils';
 import ColumnFilter from '../../utils/ColumnFilter';
 
 
@@ -14,17 +14,77 @@ const ServerSideDatatable = ({
     columns,
     datasource,
     paginated = false,
-    pagination = null,
     limiRows = ['10', '15','25'],
     sortable = false,
-    sort = {},
-    onPageChnage = () => { },
-    onLimitChnage = () => { },
-    onFilterChnage = () => { },
-    onSortChnage = () => { }
+    onQueryChange = () => {}
 }) => {
 
     const [filter, setFilter] = useState(initFilter(columns))
+
+    const [pagination, setPagination] = useState({
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+        total: 0
+    })
+
+    const {
+        page,
+        limit,
+        totalPages,
+        total
+    } = pagination;
+
+    const [sortData, setSortData] = useState({
+        sortField: null,
+        sortDir: null
+    })
+
+    const {
+        sortField,
+        sortDir
+    } = sortData;
+
+    const [filterData, setFilterData] = useState(null)
+
+    useEffect(() => {
+        onQueryChange({
+            pagination,
+            sortData,
+            filterData: filtersDataReq(filterData)
+        });
+    }, [page, limit, sortData, filterData])
+
+    const onPageChnage = (page) => {
+        setPagination({
+            ...pagination,
+            page: page
+        })
+    }
+    
+
+    const onSortChnage = (column, direction) => {
+        setSortData({
+            sortField: column,
+            sortDir: direction
+        })
+    }
+
+    const onLimitChnage = (value) => {
+        setPagination({
+            ...pagination,
+            limit: value,
+            page: 1
+        })
+    }
+
+    const onFilterChnage = (data) => {
+        setFilterData(data)
+        setPagination({
+            ...pagination,
+            page: 1
+        })
+    }
 
     const setFilterInput = (field, value) => {
         const aux = filter[field];
@@ -150,9 +210,11 @@ const ServerSideDatatable = ({
             padding: 0,
             margin: 0,
             borderRadius: 0,
-            flex: 8
+            flex: 8,
+            border: '1px solid rgba(34, 36, 38, 0.15)',
+            borderBottom: 'none'
         }}>
-            <Table style={{ borderRadius: 0, textAlign: centered ? 'center' : '' }}
+            <Table style={{ height: "fit-content", border: 'none', borderRadius: 0, textAlign: centered ? 'center' : '' }}
                 selectable={selectable} striped={striped} sortable={sortable} celled
             >
                 <Table.Header>
@@ -163,8 +225,8 @@ const ServerSideDatatable = ({
                                     <Table.HeaderCell
                                         key={col.field}
                                         style={{ position: 'relative', ...col.style ? col.style : null }}
-                                        sorted={sortable && sort && sort.sortField === col.field && col.sortable ? getSortData(sort.sortDir) : null}
-                                        onClick={() => sortable && col.sortable && onSortChnage(col.field, sortDirection(sort, col.field))}
+                                        sorted={sortable && sortField && sortField === col.field && col.sortable ? getSortData(sortDir) : null}
+                                        onClick={() => sortable && col.sortable && onSortChnage(col.field, sortDirection({sortField, sortDir}, col.field))}
                                     >
                                         {col.headerName}
                                         {col.filter &&

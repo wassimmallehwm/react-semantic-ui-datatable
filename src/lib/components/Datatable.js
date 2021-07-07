@@ -14,22 +14,15 @@ const Datatable = ({
     columns,
     datasource,
     paginated,
-    pagination,
     sortable,
-    sort = {},
-    onPageChnage = () => { },
-    onLimitChnage = () => { },
-    onFilterChnage = () => { },
-    onSortChnage = () => { }
+    onQueryChange = () => {}
 }) => {
     return serverSide ? 
         (
             <ServerSideDatatable
                 loading={loading} centered={centered} selectable={selectable}
                 striped={striped} columns={columns} datasource={datasource}
-                paginated={paginated} pagination={pagination} onPageChnage={onPageChnage}
-                sortable={sortable} sort={sort} onSortChnage={onSortChnage}
-                onLimitChnage={onLimitChnage} onFilterChnage={onFilterChnage}
+                paginated={paginated} sortable={sortable} onQueryChange={onQueryChange}
             />
         ) :
         (

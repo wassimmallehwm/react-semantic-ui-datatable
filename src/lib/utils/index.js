@@ -59,6 +59,30 @@ export const initFilter = (columns) => {
     return initFilter;
 }
 
+export const filtersDataReq = (filterData) => {
+    let result = {};
+    if(filterData){
+        for (const [key, val] of Object.entries(filterData)) {
+            let filterItem = {};
+            if(val.date){
+                filterItem["date"] = true;
+                if(val.from.value != ""){
+                    filterItem["from"] = val.from.value;
+                }
+                if(val.to.value != ""){
+                    filterItem["to"] = val.to.value;
+                }
+            } else {
+                if(val.value != ""){
+                    filterItem["value"] = val.value
+                }
+            }
+            result[key] = filterItem
+        }
+    }
+    return result;
+}
+
 export const clientSideFilter = (data, filterData) => {
     for (const [key, val] of Object.entries(filterData)) {
         if(val.date){
