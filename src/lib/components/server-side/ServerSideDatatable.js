@@ -45,15 +45,13 @@ const ServerSideDatatable = ({
         sortDir
     } = sortData;
 
-    const [filterData, setFilterData] = useState(null)
-
     useEffect(() => {
         onQueryChange({
             pagination,
             sortData,
-            filterData: filtersDataReq(filterData)
+            filterData: filtersDataReq(filter)
         });
-    }, [page, limit, sortData, filterData])
+    }, [page, limit, sortData, filter])
 
     const onPageChnage = (page) => {
         setPagination({
@@ -79,7 +77,7 @@ const ServerSideDatatable = ({
     }
 
     const onFilterChnage = (data) => {
-        setFilterData(data)
+        setFilter(data)
         setPagination({
             ...pagination,
             page: 1
