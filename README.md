@@ -116,6 +116,11 @@ React datatable using semantic-ui library.
     <td>Limit rows displayed with pagination</td>
   </tr>
   <tr>
+    <td>totalRows</td>
+    <td><code>--</code></td>
+    <td>Total data count</td>
+  </tr>
+  <tr>
     <td>onQueryChange</td>
     <td><code>(data) => {}</code></td>
     <td>listener methode for pagination, limit, sort and filters changes.

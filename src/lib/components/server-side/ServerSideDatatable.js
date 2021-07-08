@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
 import NoData from '../../utils/NoData';
 import Tooltip from '../../utils/Tooltip'
-import { dropdownLimitOptions, getSortData, initFilter, filtersDataReq, sortDirection } from '../../utils';
+import { dropdownLimitOptions, getSortData, initFilter, filtersDataReq, sortDirection, initFilterVisibility } from '../../utils';
 import ColumnFilter from '../../utils/ColumnFilter';
 
 
@@ -15,23 +15,24 @@ const ServerSideDatatable = ({
     datasource,
     paginated = false,
     limiRows = ['10', '15','25'],
+    totalRows = 10,
     sortable = false,
     onQueryChange = () => {}
 }) => {
 
     const [filter, setFilter] = useState(initFilter(columns))
+    const [filterVisibility, setFilterVisibility] = useState(initFilterVisibility(columns))
+    
 
     const [pagination, setPagination] = useState({
         page: 1,
         limit: 10,
-        totalPages: 0,
-        total: 0
+        total: totalRows
     })
 
     const {
         page,
         limit,
-        totalPages,
         total
     } = pagination;
 
@@ -103,20 +104,20 @@ const ServerSideDatatable = ({
         }
     }
 
-    const toggleFilterVisibility = (field, value) => {
-        setFilter(prev => {
+    const toggleFilterVisibility = (field) => {
+        setFilterVisibility(prev => {
             const aux = prev[field];
-            aux.visible = value ? value : !aux.visible
-            return { ...filter, [field]: aux }
+            aux.visible = !aux.visible
+            return { ...filterVisibility, [field]: aux }
         })
     }
 
     const hideAllFilters = () => {
         let result = {};
         for (const [key, value] of Object.entries(filter)) {
-            result[key] = { ...value, visible: false }
+            result[key] = { visible: false }
         }
-        setFilter(result)
+        setFilterVisibility(result)
     }
 
     const paginationState = {
@@ -167,20 +168,20 @@ const ServerSideDatatable = ({
             }}>
                 <span>
                     <strong>
-                        {` ${(pagination.page * pagination.limit - pagination.limit) + 1} `}
+                        {` ${(page * limit - limit) + 1} `}
                     </strong>
                     <span>to</span>
                     <strong>
-                        {` ${pagination.page * pagination.limit} `}
+                        {` ${(page * limit) - limit + datasource.length} `}
                     </strong>
                     <span>of</span>
                     <strong>
-                        {` ${pagination.total} `}
+                        {` ${total} `}
                     </strong>
                 </span>
                 <Dropdown className="limit-dropdown"
                     options={dropdownLimitOptions(limiRows)}
-                    value={pagination.limit}
+                    value={limit}
                     onChange={handleLimitChange}
                 />
                 <Pagination
@@ -190,7 +191,7 @@ const ServerSideDatatable = ({
                     boundaryRange={boundaryRange}
                     onPageChange={handlePaginationChange}
                     siblingRange={siblingRange}
-                    totalPages={pagination.totalPages}
+                    totalPages={Math.ceil(total / limit)}
                     // Heads up! All items are powered by shorthands, if you want to hide one of them, just pass `null` as value
                     ellipsisItem={showEllipsis ? undefined : null}
                     firstItem={paginationItem('First page', 'angle double left')}
@@ -228,7 +229,8 @@ const ServerSideDatatable = ({
                                     >
                                         {col.headerName}
                                         {col.filter &&
-                                            <ColumnFilter data={col} filter={filter} toggleFilterVisibility={toggleFilterVisibility}
+                                            <ColumnFilter data={col} filter={filter} filterVisibility={filterVisibility} 
+                                                toggleFilterVisibility={toggleFilterVisibility}
                                                 setFilterInput={setFilterInput} setFilterDate={setFilterDate}
                                             />
                                         }

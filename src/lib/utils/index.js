@@ -42,7 +42,6 @@ export const initFilter = (columns) => {
                 if (col.filterOptions.type == 'date') {
                     initFilter[col.field] = {
                         date: true,
-                        visible: false,
                         from: {
                             value: ''
                         },
@@ -52,8 +51,18 @@ export const initFilter = (columns) => {
                     }
                 }
             } else {
-                initFilter[col.field] = { visible: false, value: '' }
+                initFilter[col.field] = { value: '' }
             }
+        }
+    })
+    return initFilter;
+}
+
+export const initFilterVisibility = (columns) => {
+    let initFilter = {};
+    columns.forEach(col => {
+        if (col.filter) {
+            initFilter[col.field] = { visible: false }
         }
     })
     return initFilter;
@@ -72,12 +81,15 @@ export const filtersDataReq = (filterData) => {
                 if(val.to.value != ""){
                     filterItem["to"] = val.to.value;
                 }
+                if(filterItem.from || filterItem.to){
+                    result[key] = filterItem
+                }
             } else {
                 if(val.value != ""){
                     filterItem["value"] = val.value
+                    result[key] = filterItem
                 }
             }
-            result[key] = filterItem
         }
     }
     return result;

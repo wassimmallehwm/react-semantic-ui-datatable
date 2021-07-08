@@ -15,13 +15,14 @@ const Datatable = ({
     datasource,
     paginated,
     sortable,
+    totalRows,
     onQueryChange = () => {}
 }) => {
     return serverSide ? 
         (
             <ServerSideDatatable
                 loading={loading} centered={centered} selectable={selectable}
-                striped={striped} columns={columns} datasource={datasource}
+                striped={striped} columns={columns} datasource={datasource} totalRows={totalRows}
                 paginated={paginated} sortable={sortable} onQueryChange={onQueryChange}
             />
         ) :
