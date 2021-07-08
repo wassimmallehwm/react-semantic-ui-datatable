@@ -2,7 +2,7 @@
 
 React datatable using semantic-ui library.
 
-![alt text](/utils/screenshot.jpg?raw=true "Datatable")
+![alt text](/src/lib/screenshot.jpg?raw=true "Datatable")
 
 ## Columns definition
 <table>
