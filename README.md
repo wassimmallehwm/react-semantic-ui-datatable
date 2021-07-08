@@ -2,6 +2,8 @@
 
 React datatable using semantic-ui library.
 
+![alt text](/utils/screenshot.jpg?raw=true "Datatable")
+
 ## Columns definition
 <table>
   <tr>
@@ -280,7 +282,8 @@ function App() {
 
     return (
       <Datatable serverSide onQueryChange={getServerSideData}
-        columns={colDefs} datasource={datasource} paginated sortable
+        columns={colDefs} totalRows={totalRows} datasource={datasource}
+        paginated sortable
       />
     );
 }
