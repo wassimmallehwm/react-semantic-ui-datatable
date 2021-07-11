@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
 import NoData from '../../utils/NoData';
 import Tooltip from '../../utils/Tooltip'
-import { clientSideFilter, dropdownLimitOptions, getSortData, initFilter, sortDirection } from '../../utils/index';
+import { clientSideFilter, dropdownLimitOptions, getSortData, initFilter, initFilterVisibility, sortDirection } from '../../utils/index';
 import ColumnFilter from '../../utils/ColumnFilter';
 
 
@@ -19,6 +19,7 @@ const ClientSideDatatable = ({
 }) => {
 
     const [filter, setFilter] = useState(initFilter(columns))
+    const [filterVisibility, setFilterVisibility] = useState(initFilterVisibility(columns))
     const [pagination, setPagination] = useState({
         page: 1,
         limit: 10,
@@ -125,11 +126,11 @@ const ClientSideDatatable = ({
         }
     }
 
-    const toggleFilterVisibility = (field, value) => {
-        setFilter(prev => {
+    const toggleFilterVisibility = (field) => {
+        setFilterVisibility(prev => {
             const aux = prev[field];
-            aux.visible = value ? value : !aux.visible
-            return { ...filter, [field]: aux }
+            aux.visible = !aux.visible
+            return { ...filterVisibility, [field]: aux }
         })
     }
 
@@ -138,7 +139,7 @@ const ClientSideDatatable = ({
         for (const [key, value] of Object.entries(filter)) {
             result[key] = { ...value, visible: false }
         }
-        setFilter(result)
+        setFilterVisibility(result)
     }
 
     const paginationState = {
@@ -254,7 +255,8 @@ const ClientSideDatatable = ({
                                     >
                                         {col.headerName}
                                         {col.filter &&
-                                            <ColumnFilter data={col} filter={filter} toggleFilterVisibility={toggleFilterVisibility}
+                                            <ColumnFilter data={col} filter={filter} filterVisibility={filterVisibility} 
+                                                toggleFilterVisibility={toggleFilterVisibility}
                                                 setFilterInput={setFilterInput} setFilterDate={setFilterDate}
                                             />
                                         }
