@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
 import NoData from '../../utils/NoData';
 import Tooltip from '../../utils/Tooltip'
@@ -6,7 +6,7 @@ import { clientSideFilter, dropdownLimitOptions, getSortData, initFilter, initFi
 import ColumnFilter from '../../utils/ColumnFilter';
 
 
-const ClientSideDatatable = ({
+const ClientSideDatatable = forwardRef(({
     loading = false,
     centered = false,
     selectable = true,
@@ -16,14 +16,14 @@ const ClientSideDatatable = ({
     paginated = false,
     limiRows = ['10', '15','25'],
     sortable = false
-}) => {
+}, ref ) => {
 
     const [filter, setFilter] = useState(initFilter(columns))
     const [filterVisibility, setFilterVisibility] = useState(initFilterVisibility(columns))
     const [pagination, setPagination] = useState({
         page: 1,
         limit: 10,
-        totalPages: (datasource.length / 10) + 1,
+        totalPages: Math.ceil(datasource.length / 10),
         total: datasource.length
     })
 
@@ -66,7 +66,7 @@ const ClientSideDatatable = ({
     useEffect(() => {
         setPagination(prev => ({
             ...prev,
-            totalPages: Math.round(datasource.length / prev.limit)
+            totalPages: Math.ceil(datasource.length / prev.limit)
         }))
     }, [])
 
@@ -94,7 +94,7 @@ const ClientSideDatatable = ({
         setPagination({
             ...pagination,
             limit: value,
-            totalPages: Math.round(datasource.length / value),
+            totalPages: Math.ceil(datasource.length / value),
             page: 1
         })
     }
@@ -134,13 +134,24 @@ const ClientSideDatatable = ({
         })
     }
 
-    const hideAllFilters = () => {
-        let result = {};
-        for (const [key, value] of Object.entries(filter)) {
-            result[key] = { ...value, visible: false }
+    // const hideAllFilters = () => {
+    //     let result = {};
+    //     for (const [key, value] of Object.entries(filter)) {
+    //         result[key] = { ...value, visible: false }
+    //     }
+    //     setFilterVisibility(result)
+    // }
+
+    useImperativeHandle(ref, () => ({
+        hideAllFilters: () => {
+            let result = {};
+            for (const [key, value] of Object.entries(filter)) {
+                result[key] = { ...value, visible: false }
+            }
+            setFilterVisibility(result)
         }
-        setFilterVisibility(result)
-    }
+      }));
+    
 
     const paginationState = {
         boundaryRange: 0,
@@ -179,9 +190,10 @@ const ClientSideDatatable = ({
     const paginationPanel = (
         paginated && pagination && 
         <Grid.Row style={{
-            border: '1px solid rgba(34,36,38,.15)',
-            borderTop: 'none',
-            flex: 1
+            border: 'none',
+            borderTop: '1px solid rgba(34,36,38,.15)',
+            flex: 1,
+            padding: 0
         }}>
             <div style={{ 
                 width: '100%',
@@ -236,8 +248,7 @@ const ClientSideDatatable = ({
             margin: 0,
             borderRadius: 0,
             flex: 8,
-            border: '1px solid rgba(34, 36, 38, 0.15)',
-            borderBottom: 'none'
+            border: 'none'
         }}>
             <Table style={{ height: "fit-content", border: 'none', borderRadius: 0, textAlign: centered ? 'center' : '' }}
                 selectable={selectable} striped={striped} sortable={sortable} celled
@@ -274,8 +285,8 @@ const ClientSideDatatable = ({
                                     <Table.Row key={i}>
                                         {
                                             columns && columns.map(
-                                                col =>
-                                                    <Table.Cell className={col.className ? col.className : ''}
+                                                (col, index) =>
+                                                    <Table.Cell key={index} className={col.className ? col.className : ''}
                                                         style={col.style ? col.style : null}
                                                     >
                                                         {
@@ -305,19 +316,11 @@ const ClientSideDatatable = ({
 
 
     return (
-        <Grid onClick={hideAllFilters} style={{
-            display: 'flex',
-            height: '80vh',
-            flexDirection: `${pagination && pagination.position == 'top' ? 'column-reverse' : 'column'}`,
-            width: '100%',
-            borderRadius: 0,
-            margin: '1rem auto',
-            padding: 0 
-        }}>
+        <>
             {dataTable}
-            {pagination && paginationPanel}
-        </Grid>
+            {paginated == true && paginationPanel}
+        </>
     )
-}
+})
 
 export default ClientSideDatatable

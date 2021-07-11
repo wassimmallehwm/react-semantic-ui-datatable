@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { Pagination, Grid, Table, Segment, Dimmer, Loader, Icon, Dropdown } from 'semantic-ui-react';
 import NoData from '../../utils/NoData';
 import Tooltip from '../../utils/Tooltip'
@@ -6,7 +6,7 @@ import { dropdownLimitOptions, getSortData, initFilter, filtersDataReq, sortDire
 import ColumnFilter from '../../utils/ColumnFilter';
 
 
-const ServerSideDatatable = ({
+const ServerSideDatatable = forwardRef(({
     loading = false,
     centered = false,
     selectable = true,
@@ -18,7 +18,7 @@ const ServerSideDatatable = ({
     totalRows = 10,
     sortable = false,
     onQueryChange = () => {}
-}) => {
+}, ref ) => {
 
     const [filter, setFilter] = useState(initFilter(columns))
     const [filterVisibility, setFilterVisibility] = useState(initFilterVisibility(columns))
@@ -112,13 +112,23 @@ const ServerSideDatatable = ({
         })
     }
 
-    const hideAllFilters = () => {
-        let result = {};
-        for (const [key, value] of Object.entries(filter)) {
-            result[key] = { visible: false }
+    // const hideAllFilters = () => {
+    //     let result = {};
+    //     for (const [key, value] of Object.entries(filter)) {
+    //         result[key] = { visible: false }
+    //     }
+    //     setFilterVisibility(result)
+    // }
+
+    useImperativeHandle(ref, () => ({
+        hideAllFilters: () => {
+            let result = {};
+            for (const [key, value] of Object.entries(filter)) {
+                result[key] = { visible: false }
+            }
+            setFilterVisibility(result)
         }
-        setFilterVisibility(result)
-    }
+      }));
 
     const paginationState = {
         boundaryRange: 0,
@@ -157,9 +167,10 @@ const ServerSideDatatable = ({
     const paginationPanel = (
         paginated && pagination && 
         <Grid.Row style={{
-            border: '1px solid rgba(34,36,38,.15)',
-            borderTop: 'none',
-            flex: 1
+            border: 'none',
+            borderTop: '1px solid rgba(34,36,38,.15)',
+            flex: 1,
+            padding: 0
         }}>
             <div style={{ 
                 width: '100%',
@@ -210,8 +221,7 @@ const ServerSideDatatable = ({
             margin: 0,
             borderRadius: 0,
             flex: 8,
-            border: '1px solid rgba(34, 36, 38, 0.15)',
-            borderBottom: 'none'
+            border: 'none'
         }}>
             <Table style={{ height: "fit-content", border: 'none', borderRadius: 0, textAlign: centered ? 'center' : '' }}
                 selectable={selectable} striped={striped} sortable={sortable} celled
@@ -279,19 +289,11 @@ const ServerSideDatatable = ({
 
 
     return (
-        <Grid onClick={hideAllFilters} style={{
-            display: 'flex',
-            height: '80vh',
-            flexDirection: `${pagination && pagination.position == 'top' ? 'column-reverse' : 'column'}`,
-            width: '100%',
-            borderRadius: 0,
-            margin: '1rem',
-            padding: 0 
-        }}>
+        <>
             {dataTable}
-            {pagination && paginationPanel}
-        </Grid>
+            {paginated == true && paginationPanel}
+        </>
     )
-}
+})
 
 export default ServerSideDatatable
