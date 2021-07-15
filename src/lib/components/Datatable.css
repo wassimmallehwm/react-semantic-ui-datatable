@@ -88,8 +88,9 @@
     margin-top: -2rem!important;
   }
 
-  .actions-cell >.ui.circular.icon.button{
+  .action-btn{
       box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)!important;
+      margin: 0 .2rem!important;
   }
 
   @media only screen and (max-width: 767px) {
