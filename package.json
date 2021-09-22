@@ -1,6 +1,6 @@
 {
   "name": "react-semantic-ui-datatable",
-  "version": "1.0.15",
+  "version": "1.0.20",
   "license": "MIT",
   "keywords": [
     "react",
@@ -21,11 +21,17 @@
     "type": "git",
     "url": "git+https://github.com/wassimmallehwm/react-semantic-ui-datatable.git"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/wassimmallehwm"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.1",
     "web-vitals": "^1.1.2"

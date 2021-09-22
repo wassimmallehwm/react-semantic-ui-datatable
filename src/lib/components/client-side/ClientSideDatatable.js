@@ -51,15 +51,12 @@ const ClientSideDatatable = forwardRef(({
         if(sort.sortField && sort.sortDir){
             paginatedDatasource.sort(dynamicSort());
         }
-        paginatedDatasource = paginatedDatasource.slice(
-            (pagination.page-1) * pagination.limit,
-            (pagination.page) * pagination.limit
-        )
-        // setPagination(prev => ({
-        //     ...prev,
-        //     totalPages: Math.round(paginatedDatasource.length / prev.limit),
-        //     total: paginatedDatasource.length
-        // }))
+        if(paginated){
+            paginatedDatasource = paginatedDatasource.slice(
+                (pagination.page-1) * pagination.limit,
+                (pagination.page) * pagination.limit
+            )
+        }
         setDisplayDatasource(paginatedDatasource)
     }
 
@@ -133,14 +130,6 @@ const ClientSideDatatable = forwardRef(({
             return { ...filterVisibility, [field]: aux }
         })
     }
-
-    // const hideAllFilters = () => {
-    //     let result = {};
-    //     for (const [key, value] of Object.entries(filter)) {
-    //         result[key] = { ...value, visible: false }
-    //     }
-    //     setFilterVisibility(result)
-    // }
 
     useImperativeHandle(ref, () => ({
         hideAllFilters: () => {

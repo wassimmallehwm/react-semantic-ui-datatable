@@ -111,15 +111,7 @@ const ServerSideDatatable = forwardRef(({
             return { ...filterVisibility, [field]: aux }
         })
     }
-
-    // const hideAllFilters = () => {
-    //     let result = {};
-    //     for (const [key, value] of Object.entries(filter)) {
-    //         result[key] = { visible: false }
-    //     }
-    //     setFilterVisibility(result)
-    // }
-
+    
     useImperativeHandle(ref, () => ({
         hideAllFilters: () => {
             let result = {};
@@ -187,7 +179,7 @@ const ServerSideDatatable = forwardRef(({
                     </strong>
                     <span>of</span>
                     <strong>
-                        {` ${total} `}
+                        {` ${totalRows} `}
                     </strong>
                 </span>
                 <Dropdown className="limit-dropdown"
@@ -202,7 +194,7 @@ const ServerSideDatatable = forwardRef(({
                     boundaryRange={boundaryRange}
                     onPageChange={handlePaginationChange}
                     siblingRange={siblingRange}
-                    totalPages={Math.ceil(total / limit)}
+                    totalPages={Math.ceil(totalRows / limit)}
                     // Heads up! All items are powered by shorthands, if you want to hide one of them, just pass `null` as value
                     ellipsisItem={showEllipsis ? undefined : null}
                     firstItem={paginationItem('First page', 'angle double left')}
